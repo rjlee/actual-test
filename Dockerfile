@@ -1,4 +1,14 @@
-FROM ghcr.io/rjlee/actual-test:latest
+FROM node:20-alpine
 
-# Run the installed start script
+# Create app directory
+WORKDIR /app
+
+# Install dependencies (production only)
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev
+
+# Bundle app source
+COPY . .
+
+# Default command
 CMD ["npm", "start"]

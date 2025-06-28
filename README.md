@@ -54,14 +54,15 @@ If you have Docker and Docker Compose installed, you can run the daemon in a con
 ```bash
 # Copy the example .env and edit it as needed (ensure BUDGET_CACHE_DIR is an absolute host path)
 cp .env.example .env
-# Pull the latest image and run
-docker-compose pull
+# Build the Docker image (first run or after code/dependency changes)
+docker-compose build
+# Start the daemon (foreground)
 docker-compose up
 # To run in the background:
 docker-compose up -d
 ```
 
-This pulls the pre-built image from GHCR (as specified in the compose file), bind‑mounts the host path defined in `BUDGET_CACHE_DIR` into `/app/data` inside the container, and streams balance updates in the logs.
+This builds a local Docker image from the provided Dockerfile, bind‑mounts the host path defined in `BUDGET_CACHE_DIR` into `/app/data` inside the container, and streams balance updates in the logs.
 
 Alternatively, you can build and run the Docker image manually:
 
