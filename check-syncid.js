@@ -7,21 +7,21 @@ const api = require('@actual-app/api');
 
 (async () => {
   const {
-    ACTUAL_DATA_DIR: dataDir,
+    BUDGET_CACHE_DIR: budgetCacheDir,
     ACTUAL_SERVER_URL: serverURL,
     ACTUAL_PASSWORD: password,
     ACTUAL_SYNC_ID: syncId,
   } = process.env;
 
-  if (!dataDir || !serverURL || !password || !syncId) {
+  if (!budgetCacheDir || !serverURL || !password || !syncId) {
     console.error(
-      '❌ Please set ACTUAL_DATA_DIR, ACTUAL_SERVER_URL, ACTUAL_PASSWORD and ACTUAL_SYNC_ID in your .env'
+      '❌ Please set BUDGET_CACHE_DIR, ACTUAL_SERVER_URL, ACTUAL_PASSWORD and ACTUAL_SYNC_ID in your .env'
     );
     process.exit(1);
   }
 
   try {
-    await api.init({ dataDir, serverURL, password });
+    await api.init({ dataDir: budgetCacheDir, serverURL, password });
 
     console.log('🔍 Fetching list of budgets/groups from server…');
     const budgets = await api.getBudgets();

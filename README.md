@@ -6,23 +6,27 @@ This script periodically syncs your Actual budget and prints account balances.
 
 Create a `.env` file in this directory based on `.env.example` and fill in the required values:
 
-```ini
 # Local directory to cache budget data
-ACTUAL_DATA_DIR=/path/to/your/Actual/data
+
+BUDGET_CACHE_DIR=/path/to/your/Actual/data
 
 # URL of your running Actual sync server
+
 ACTUAL_SERVER_URL=http://localhost:5006
 
 # Password for server authentication
+
 ACTUAL_PASSWORD=yourpassword
 
 # The Sync ID (groupId) from Settings → Show advanced settings → Sync ID
+
 ACTUAL_SYNC_ID=your-sync-id
 
-
 # (Optional) for self-signed certificates
+
 # NODE_TLS_REJECT_UNAUTHORIZED=0
-```
+
+````
 
 If your budget directory isn't present locally, the daemon will auto-download it on first run using your server URL and password.
 
@@ -32,7 +36,7 @@ Install dependencies (and ensure you're running Node.js v20 or newer):
 
 ```bash
 npm install
-```
+````
 
 ## Usage
 
@@ -63,7 +67,7 @@ docker-compose up
 docker-compose up -d
 ```
 
-This uses the included Dockerfile to build an image that bundles your code and dependencies, then mounts your budget data directory (as defined by `ACTUAL_DATA_DIR` in your `.env`) into the container and streams balance updates in the logs.
+This uses the included Dockerfile to build an image that bundles your code and dependencies, then mounts your budget cache directory (as defined by `BUDGET_CACHE_DIR` in your `.env`) into the container and streams balance updates in the logs.
 
 Alternatively, you can build and run the Docker image manually:
 
@@ -71,6 +75,6 @@ Alternatively, you can build and run the Docker image manually:
 docker build -t actual-budget-daemon .
 docker run --rm -it \
   --env-file .env \
-  -v ${ACTUAL_DATA_DIR}:${ACTUAL_DATA_DIR} \
+  -v ${BUDGET_CACHE_DIR}:${BUDGET_CACHE_DIR} \
   actual-budget-daemon
 ```

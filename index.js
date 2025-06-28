@@ -7,19 +7,19 @@ const api = require('@actual-app/api');
 const cron = require('node-cron');
 
 (async () => {
-  const dataDir = process.env.ACTUAL_DATA_DIR;
+  const budgetCacheDir = process.env.BUDGET_CACHE_DIR;
   const serverURL = process.env.ACTUAL_SERVER_URL;
   const password = process.env.ACTUAL_PASSWORD;
   const syncId = process.env.ACTUAL_SYNC_ID;
 
-  if (!dataDir || !serverURL || !password || !syncId) {
+  if (!budgetCacheDir || !serverURL || !password || !syncId) {
     console.error(
-      'Please set ACTUAL_DATA_DIR, ACTUAL_SERVER_URL, ACTUAL_PASSWORD, and ACTUAL_SYNC_ID in your .env'
+      'Please set BUDGET_CACHE_DIR, ACTUAL_SERVER_URL, ACTUAL_PASSWORD, and ACTUAL_SYNC_ID in your .env'
     );
     process.exit(1);
   }
 
-  await api.init({ dataDir, serverURL, password });
+  await api.init({ dataDir: budgetCacheDir, serverURL, password });
 
   let hasDownloaded = false;
 

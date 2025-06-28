@@ -6,8 +6,10 @@ services:
     image: actual-budget-daemon:latest
     working_dir: /app
     volumes:
-      - ./:/app
-      - ${ACTUAL_DATA_DIR}:${ACTUAL_DATA_DIR}
+      # Persist data (model, budget, etc.) in the data directory
+      - type: bind
+        source: ./data
+        target: /app/data
     env_file:
       - .env
     command: npm start
