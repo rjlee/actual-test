@@ -5,6 +5,7 @@ services:
     image: ghcr.io/rjlee/actual-test:latest
     container_name: actual-budget-daemon
     restart: unless-stopped
+    network_mode: host
     # Optional mapping of your Actual Budget server hostname back to localhost
     extra_hosts:
       - '${OPTIONAL_EXTRA_HOST}'
