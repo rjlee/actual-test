@@ -2,12 +2,19 @@
 // check-syncid.js
 
 // Standalone script to verify that your Sync ID is registered on the Actual server.
+// Load environment variables from .env file (without overriding existing vars)
 require('dotenv').config();
 const api = require('@actual-app/api');
 
 (async () => {
+  const path = require('path');
+  const budgetCacheDirRaw = process.env.BUDGET_CACHE_DIR;
+  const budgetCacheDir =
+    budgetCacheDirRaw &&
+    (path.isAbsolute(budgetCacheDirRaw)
+      ? budgetCacheDirRaw
+      : path.resolve(process.cwd(), budgetCacheDirRaw));
   const {
-    BUDGET_CACHE_DIR: budgetCacheDir,
     ACTUAL_SERVER_URL: serverURL,
     ACTUAL_PASSWORD: password,
     ACTUAL_SYNC_ID: syncId,
@@ -15,7 +22,7 @@ const api = require('@actual-app/api');
 
   if (!budgetCacheDir || !serverURL || !password || !syncId) {
     console.error(
-      '❌ Please set BUDGET_CACHE_DIR, ACTUAL_SERVER_URL, ACTUAL_PASSWORD and ACTUAL_SYNC_ID in your .env'
+      '❌ Please set BUDGET_CACHE_DIR (absolute or relative), ACTUAL_SERVER_URL, ACTUAL_PASSWORD and ACTUAL_SYNC_ID in your .env'
     );
     process.exit(1);
   }

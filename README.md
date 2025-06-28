@@ -6,27 +6,22 @@ This script periodically syncs your Actual budget and prints account balances.
 
 Create a `.env` file in this directory based on `.env.example` and fill in the required values:
 
-# Local directory to cache budget data
-
+```ini
+# Relative or absolute path to cache budget data (directory will be created if missing)
 BUDGET_CACHE_DIR=/path/to/your/Actual/data
 
 # URL of your running Actual sync server
-
 ACTUAL_SERVER_URL=http://localhost:5006
 
 # Password for server authentication
-
 ACTUAL_PASSWORD=yourpassword
 
 # The Sync ID (groupId) from Settings → Show advanced settings → Sync ID
-
 ACTUAL_SYNC_ID=your-sync-id
 
 # (Optional) for self-signed certificates
-
 # NODE_TLS_REJECT_UNAUTHORIZED=0
-
-````
+```
 
 If your budget directory isn't present locally, the daemon will auto-download it on first run using your server URL and password.
 
@@ -36,7 +31,7 @@ Install dependencies (and ensure you're running Node.js v20 or newer):
 
 ```bash
 npm install
-````
+```
 
 ## Usage
 
