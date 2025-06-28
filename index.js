@@ -28,6 +28,19 @@ const cron = require('node-cron');
 
   await api.init({ dataDir: budgetCacheDir, serverURL, password });
 
+  // Connectivity check: verify the sync server is reachable
+  try {
+    console.log('🔌 Testing connectivity to Actual sync server at', serverURL);
+    await api.getBudgets();
+  } catch (err) {
+    console.error(
+      '❌ Unable to reach Actual server at',
+      serverURL + ':',
+      err.message
+    );
+    process.exit(1);
+  }
+
   let hasDownloaded = false;
 
   async function syncAndReport() {
