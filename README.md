@@ -59,23 +59,23 @@ If you have Docker and Docker Compose installed, you can run the daemon in a con
 ```bash
 # Copy the example .env and edit it as needed (ensure BUDGET_CACHE_DIR is an absolute host path)
 cp .env.example .env
-# Build the Docker image (first run or after code/dependency changes)
-docker-compose build
-# Start the daemon (foreground)
+# Pull the latest image and run
+docker-compose pull
 docker-compose up
 # To run in the background:
 docker-compose up -d
 ```
 
-This uses the included Dockerfile to build an image that bundles your code and dependencies, then bind‑mounts the host path defined in `BUDGET_CACHE_DIR` (from your `.env`) to `/app/data` inside the container and streams balance updates in the logs.
+This pulls the pre-built image from GHCR (as specified in the compose file), bind‑mounts the host path defined in `BUDGET_CACHE_DIR` into `/app/data` inside the container, and streams balance updates in the logs.
 
 Alternatively, you can build and run the Docker image manually:
 
 ```bash
-docker build -t actual-budget-daemon .
+# Pull the latest image instead of building
+docker pull ghcr.io/rjlee/actual-test:latest
 docker run --rm -it \
   --env-file .env \
   --env BUDGET_CACHE_DIR=/app/data \
   -v ${BUDGET_CACHE_DIR}:/app/data \
-  actual-budget-daemon
+  ghcr.io/rjlee/actual-test:latest
 ```

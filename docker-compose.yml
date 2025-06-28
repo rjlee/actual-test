@@ -2,8 +2,7 @@ version: '3.9'
 
 services:
   budget-daemon:
-    build: .
-    image: actual-budget-daemon:latest
+    image: ghcr.io/rjlee/actual-test:latest
     working_dir: /app
     volumes:
       # Persist budget data; BUDGET_CACHE_DIR is loaded from .env for substitution
@@ -12,4 +11,6 @@ services:
         target: /app/data
     env_file:
       - .env
+    environment:
+      - BUDGET_CACHE_DIR=/app/data
     command: npm start
