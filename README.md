@@ -104,11 +104,15 @@ TOKEN=$(curl -k -s -X POST -H "Content-Type: application/json" \
   | grep -oP '"token":\s*"\K[^"]+')
 echo "Token: $TOKEN"
 
-# 4️⃣ Sync endpoint (must return 200 OK or 422 Unprocessable Entity)
-curl -k -i -X POST --data-binary '' \
-  -H "Content-Type: application/actual-sync" \
-  -H "X-ACTUAL-TOKEN: $TOKEN" \
-  "${ACTUAL_SERVER_URL}/sync/sync"
+# 4️⃣ Test JSON-RPC download-budget (must return 200 OK)
+curl -k -i -X POST -H "Content-Type: application/json" \
+  -d '{"syncId":"'"${ACTUAL_SYNC_ID}"'","password":"'"${ACTUAL_PASSWORD}"'"}' \
+  "${ACTUAL_SERVER_URL}/api/download-budget"
+
+# 5️⃣ Test JSON-RPC sync (must return 200 OK or JSON error)
+curl -k -i -X POST -H "Content-Type: application/json" \
+  -d '{}' \
+  "${ACTUAL_SERVER_URL}/api/sync"
 ```
 
 #
