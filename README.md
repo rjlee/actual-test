@@ -55,10 +55,22 @@ If you have Docker and Docker Compose installed, you can run the daemon in a con
 ```bash
 # Copy the example .env and edit it as needed
 cp .env.example .env
+# Build the Docker image (first run or after changes)
+docker-compose build
 # Start the daemon with Docker Compose (foreground)
 docker-compose up
 # To run in the background:
 docker-compose up -d
 ```
 
-This will mount your budget data directory (as defined by `ACTUAL_DATA_DIR` in your `.env`) into the container and stream balance updates in the logs.
+This uses the included Dockerfile to build an image that bundles your code and dependencies, then mounts your budget data directory (as defined by `ACTUAL_DATA_DIR` in your `.env`) into the container and streams balance updates in the logs.
+
+Alternatively, you can build and run the Docker image manually:
+
+```bash
+docker build -t actual-budget-daemon .
+docker run --rm -it \
+  --env-file .env \
+  -v ${ACTUAL_DATA_DIR}:${ACTUAL_DATA_DIR} \
+  actual-budget-daemon
+```

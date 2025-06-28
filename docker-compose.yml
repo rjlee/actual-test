@@ -2,11 +2,12 @@ version: '3.9'
 
 services:
   budget-daemon:
-    image: node:20-alpine
+    build: .
+    image: actual-budget-daemon:latest
     working_dir: /app
     volumes:
       - ./:/app
       - ${ACTUAL_DATA_DIR}:${ACTUAL_DATA_DIR}
     env_file:
       - .env
-    command: sh -c "npm install && npm start"
+    command: npm start
