@@ -2,8 +2,9 @@ version: '3.9'
 
 services:
   budget-daemon:
-    build: .
-    working_dir: /app
+    image: ghcr.io/rjlee/actual-test:latest
+    container_name: actual-budget-daemon
+    restart: unless-stopped
     volumes:
       # Persist budget data; BUDGET_CACHE_DIR is loaded from .env for substitution
       - type: bind
