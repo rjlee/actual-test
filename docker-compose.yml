@@ -6,9 +6,9 @@ services:
     container_name: actual-budget-daemon
     restart: unless-stopped
     network_mode: host
-    # Optional mapping of your Actual Budget server hostname back to localhost
-    extra_hosts:
-      - '${OPTIONAL_EXTRA_HOST}'
+    # Optional mapping of your Actual Budget server hostname back to localhost (not needed with host network)
+    #extra_hosts:
+    #  - '${OPTIONAL_EXTRA_HOST}'
     volumes:
       # Persist budget data; BUDGET_CACHE_DIR is loaded from .env for substitution
       - type: bind

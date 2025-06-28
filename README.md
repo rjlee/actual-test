@@ -85,50 +85,51 @@ set -a && . ./.env && set +a
 
 If you encounter `PostError: network-failure` when downloading your budget, verify the download endpoint is reachable:
 
-#```bash
+```bash
+# 1️⃣ Health endpoint (must return 200 OK)
+curl -k -i -u ":${ACTUAL_PASSWORD}" "${ACTUAL_SERVER_URL}/health"
 
-# Test server health endpoint (must return 200)
+# 2️⃣ Budget download endpoint (must return 200 OK)
+curl -k -i -u ":${ACTUAL_PASSWORD}" "${ACTUAL_SERVER_URL}/api/budgets/${ACTUAL_SYNC_ID}/download"
 
-# curl -k -v \
+# 3️⃣ Login endpoint (must return JSON with data.token)
+curl -k -i -X POST -H "Content-Type: application/json" \
+  -d '{"password":"'"${ACTUAL_PASSWORD}"'"}' \
+  "${ACTUAL_SERVER_URL}/account/login"
 
-# -u ":${ACTUAL_PASSWORD}" \
+# Extract the returned token
+TOKEN=$(curl -k -s -X POST -H "Content-Type: application/json" \
+  -d '{"password":"'"${ACTUAL_PASSWORD}"'"}' \
+  "${ACTUAL_SERVER_URL}/account/login" \
+  | grep -oP '"token":\s*"\K[^"]+')
+echo "Token: $TOKEN"
 
-# "${ACTUAL_SERVER_URL}/health" \
-
-# -o /dev/null
-
-#
-
-# (Optional) test budget download endpoint (must return 200)
-
-# curl -k -v \
-
-# -u ":${ACTUAL_PASSWORD}" \
-
-# "${ACTUAL_SERVER_URL}/budgets/${ACTUAL_SYNC_ID}/download" \
-
-# -o /dev/null
-
-#```
-
-#
-
-# (Optional) If you’re running the daemon on the same host as the sync-server,
-
-# you may need to map the server hostname to localhost so Docker’s bridge
-
-# can reach it:
+# 4️⃣ Sync endpoint (must return 200 OK or 422 Unprocessable Entity)
+curl -k -i -X POST --data-binary '' \
+  -H "Content-Type: application/actual-sync" \
+  -H "X-ACTUAL-TOKEN: $TOKEN" \
+  "${ACTUAL_SERVER_URL}/sync/sync"
+```
 
 #
 
-# In your .env (uncomment to enable):
+Note: if the `/sync` test fails or you still see `network-failure` in the daemon logs,
+Your reverse-proxy or web server may be intercepting POST `/sync` (returning 404/422 or serving your front-end) instead of forwarding it to the sync-server. Ensure you have a proxy rule for POST `/sync` (and other binary‑sync endpoints such as `/download-user-file`, `/get-user-file-info`, `/upload-user-file`, etc.) that routes to the sync-server before any static or front‑end fallback.
 
-# OPTIONAL_EXTRA_HOST=your.actual-budget-server:127.0.0.1
+## (Optional) Local hostname mapping for Docker
+If you’re running the daemon on the same host as the sync-server and need to map
+the server hostname to localhost so Docker’s bridge can reach it:
 
-#
+In your `.env` (uncomment to enable):
 
-# In docker-compose.yml under budget-daemon:
+```ini
+OPTIONAL_EXTRA_HOST=your.actual-budget-server:127.0.0.1
+```
 
-# extra_hosts:
+In `docker-compose.yml` under `budget-daemon`:
 
-# - "${OPTIONAL_EXTRA_HOST}"
+```yaml
+network_mode: host
+extra_hosts:
+  - "${OPTIONAL_EXTRA_HOST}"
+```
