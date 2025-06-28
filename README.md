@@ -1,0 +1,64 @@
+# Actual Budget Daemon
+
+This script periodically syncs your Actual budget and prints account balances.
+
+## Setup
+
+Create a `.env` file in this directory based on `.env.example` and fill in the required values:
+
+```ini
+# Local directory to cache budget data
+ACTUAL_DATA_DIR=/path/to/your/Actual/data
+
+# URL of your running Actual sync server
+ACTUAL_SERVER_URL=http://localhost:5006
+
+# Password for server authentication
+ACTUAL_PASSWORD=yourpassword
+
+# The Sync ID (groupId) from Settings → Show advanced settings → Sync ID
+ACTUAL_SYNC_ID=your-sync-id
+
+
+# (Optional) for self-signed certificates
+# NODE_TLS_REJECT_UNAUTHORIZED=0
+```
+
+If your budget directory isn't present locally, the daemon will auto-download it on first run using your server URL and password.
+
+## Installation
+
+Install dependencies (and ensure you're running Node.js v20 or newer):
+
+```bash
+npm install
+```
+
+## Usage
+
+Start the daemon (Node.js v20+ required):
+
+```bash
+npm start
+```
+
+Or run directly:
+
+```bash
+node index.js
+```
+
+## Docker Compose
+
+If you have Docker and Docker Compose installed, you can run the daemon in a container:
+
+```bash
+# Copy the example .env and edit it as needed
+cp .env.example .env
+# Start the daemon with Docker Compose (foreground)
+docker-compose up
+# To run in the background:
+docker-compose up -d
+```
+
+This will mount your budget data directory (as defined by `ACTUAL_DATA_DIR` in your `.env`) into the container and stream balance updates in the logs.

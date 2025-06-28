@@ -1,0 +1,4 @@
+node_modules/
+resources/
+data/
+docker-compose.override.yml

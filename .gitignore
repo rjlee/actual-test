@@ -1,0 +1,28 @@
+## Node dependencies
+node_modules/
+
+## Environment files
+.env
+.env.*.local
+.env.working
+
+## Local data directory for budget cache
+data/
+
+## Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+## macOS files
+.DS_Store
+
+## IDE/editor directories
+.vscode/
+.idea/
+
+## Docker Compose override
+docker-compose.override.yml
+
+## Actual source/resources directory
+resources/
