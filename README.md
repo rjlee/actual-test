@@ -74,3 +74,39 @@ docker run --rm -it \
   -v ${BUDGET_CACHE_DIR}:/app/data \
   ghcr.io/rjlee/actual-test:latest
 ```
+
+## Troubleshooting connectivity
+
+Before running the snippet below, load your `.env` into the current shell so the variables expand. For example:
+
+```bash
+set -a && . ./.env && set +a
+```
+
+If you encounter `PostError: network-failure` when downloading your budget, verify the download endpoint is reachable:
+
+#```bash
+# Test server health endpoint (must return 200)
+# curl -k -v \
+#   -u ":${ACTUAL_PASSWORD}" \
+#   "${ACTUAL_SERVER_URL}/health" \
+#   -o /dev/null
+#
+# (Optional) test budget download endpoint (must return 200)
+# curl -k -v \
+#   -u ":${ACTUAL_PASSWORD}" \
+#   "${ACTUAL_SERVER_URL}/budgets/${ACTUAL_SYNC_ID}/download" \
+#   -o /dev/null
+#```
+#
+# (Optional) If you’re running the daemon on the same host as the sync-server,
+# you may need to map the server hostname to localhost so Docker’s bridge
+# can reach it:
+#
+# In your .env (uncomment to enable):
+# OPTIONAL_EXTRA_HOST=your.actual-budget-server:127.0.0.1
+#
+# In docker-compose.yml under budget-daemon:
+# extra_hosts:
+#   - "${OPTIONAL_EXTRA_HOST}"
+

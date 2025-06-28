@@ -5,6 +5,12 @@ services:
     image: ghcr.io/rjlee/actual-test:latest
     container_name: actual-budget-daemon
     restart: unless-stopped
+    # Optional mapping of your Actual Budget server hostname back to localhost
+    extra_hosts:
+      - "${OPTIONAL_EXTRA_HOST}"
+    # Optional mapping of Actual Budget server hostname to localhost (if daemon runs on same host)
+    extra_hosts:
+      - "${OPTIONAL_EXTRA_HOST}"
     volumes:
       # Persist budget data; BUDGET_CACHE_DIR is loaded from .env for substitution
       - type: bind
