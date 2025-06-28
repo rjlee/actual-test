@@ -117,6 +117,7 @@ Note: if the `/sync` test fails or you still see `network-failure` in the daemon
 Your reverse-proxy or web server may be intercepting POST `/sync` (returning 404/422 or serving your front-end) instead of forwarding it to the sync-server. Ensure you have a proxy rule for POST `/sync` (and other binary‑sync endpoints such as `/download-user-file`, `/get-user-file-info`, `/upload-user-file`, etc.) that routes to the sync-server before any static or front‑end fallback.
 
 ## (Optional) Local hostname mapping for Docker
+
 If you’re running the daemon on the same host as the sync-server and need to map
 the server hostname to localhost so Docker’s bridge can reach it:
 
@@ -131,5 +132,5 @@ In `docker-compose.yml` under `budget-daemon`:
 ```yaml
 network_mode: host
 extra_hosts:
-  - "${OPTIONAL_EXTRA_HOST}"
+  - '${OPTIONAL_EXTRA_HOST}'
 ```
