@@ -6,9 +6,9 @@ services:
     image: actual-budget-daemon:latest
     working_dir: /app
     volumes:
-      # Persist data (model, budget, etc.) in the data directory
+      # Persist budget data; BUDGET_CACHE_DIR is loaded from .env for substitution
       - type: bind
-        source: ./data
+        source: ${BUDGET_CACHE_DIR}
         target: /app/data
     env_file:
       - .env

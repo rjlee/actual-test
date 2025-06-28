@@ -57,17 +57,17 @@ node index.js
 If you have Docker and Docker Compose installed, you can run the daemon in a container:
 
 ```bash
-# Copy the example .env and edit it as needed
+# Copy the example .env and edit it as needed (ensure BUDGET_CACHE_DIR is an absolute host path)
 cp .env.example .env
-# Build the Docker image (first run or after changes)
+# Build the Docker image (first run or after code/dependency changes)
 docker-compose build
-# Start the daemon with Docker Compose (foreground)
+# Start the daemon (foreground)
 docker-compose up
 # To run in the background:
 docker-compose up -d
 ```
 
-This uses the included Dockerfile to build an image that bundles your code and dependencies, then mounts your budget cache directory (as defined by `BUDGET_CACHE_DIR` in your `.env`) into the container and streams balance updates in the logs.
+This uses the included Dockerfile to build an image that bundles your code and dependencies, then bind‑mounts the host path defined in `BUDGET_CACHE_DIR` (from your `.env`) to `/app/data` inside the container and streams balance updates in the logs.
 
 Alternatively, you can build and run the Docker image manually:
 
@@ -75,6 +75,7 @@ Alternatively, you can build and run the Docker image manually:
 docker build -t actual-budget-daemon .
 docker run --rm -it \
   --env-file .env \
-  -v ${BUDGET_CACHE_DIR}:${BUDGET_CACHE_DIR} \
+  --env BUDGET_CACHE_DIR=/app/data \
+  -v ${BUDGET_CACHE_DIR}:/app/data \
   actual-budget-daemon
 ```
